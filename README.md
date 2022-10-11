@@ -4,7 +4,7 @@ This is a prank calculator.
 
 ## How to use
 
--Clone The project.
+- Clone The project.
 
 - Run `npm i` from with in the root directer
 - Run `npm start`
