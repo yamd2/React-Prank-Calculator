@@ -3,14 +3,23 @@ import { useState } from "react";
 import "./App.css";
 import { Display } from "./components/Display";
 import { BtnArea } from "./components/BtnArea";
+import sound from "./assets/aa.wav";
 
 const operators = ["%", "/", "*", "-", "+"];
 
 const App = () => {
   const [strToDisplay, setStrToDisplay] = useState("");
   const [lastOperator, setLastOperator] = useState("");
+  const [isPrank, setIsPrank] = useState(false);
+
+  const randomNumber = () => {
+    const num = Math.round(Math.random() * 10);
+
+    return num > 5 ? 0 : num;
+  };
 
   const handleOnButtonClick = (val) => {
+    isPrank && setIsPrank(false);
     if (val === "C") {
       return setStrToDisplay(strToDisplay.slice(0, -1));
     }
@@ -26,7 +35,19 @@ const App = () => {
       if (operators.includes(lastChar)) {
         temStr = strToDisplay.slice(0, -1);
       }
-      return setStrToDisplay(eval(temStr).toString());
+
+      const extra = randomNumber();
+
+      if (extra) {
+        setIsPrank(true);
+        const audio = new Audio(sound);
+        audio.play();
+      }
+
+      extra && setIsPrank(true);
+
+      const total = eval(temStr) + extra;
+      return setStrToDisplay(total.toString());
     }
 
     if (operators.includes(val)) {
@@ -71,7 +92,7 @@ const App = () => {
       <div className="wrapper">
         <div className="round"></div>
         <div className="calculater">
-          <Display strToDisplay={strToDisplay} />
+          <Display strToDisplay={strToDisplay} isPrank={isPrank} />
           <BtnArea handleOnButtonClick={handleOnButtonClick} />
         </div>
       </div>
